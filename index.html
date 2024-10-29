@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chatbot Workspace</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* Custom Styles */
+    body, html {
+      height: 100%;
+      background-color: #f0f2f5;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Navbar Styling */
+    .navbar {
+      background: linear-gradient(45deg, #007bff, #6610f2);
+      color: white;
+    }
+    .navbar .nav-link, .navbar-brand {
+      color: white !important;
+    }
+    .navbar .nav-link:hover {
+      color: #d1d1d1 !important;
+    }
+
+    /* Chatbot Container */
+    .chatbot-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: calc(100vh - 56px);
+      padding: 20px;
+    }
+
+    /* Chat Window Styling */
+    .chat-window {
+      width: 100%;
+      max-width: 600px;
+      height: 500px;
+      background-color: #ffffff;
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .chat-content {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .chat-message {
+      padding: 10px 15px;
+      border-radius: 10px;
+      max-width: 75%;
+      font-size: 14px;
+    }
+    .chat-message.user {
+      align-self: flex-end;
+      background-color: #007bff;
+      color: white;
+    }
+    .chat-message.bot {
+      align-self: flex-start;
+      background-color: #f1f1f1;
+      color: #333;
+    }
+
+    /* Chat Input Styling */
+    .chat-input-container {
+      padding: 10px;
+      background-color: #f8f9fa;
+      border-top: 1px solid #e1e1e1;
+    }
+    .chat-input {
+      width: 100%;
+      border-radius: 8px;
+      border: 1px solid #ced4da;
+      padding: 10px;
+      font-size: 15px;
+    }
+
+    /* Access Denied Styling */
+    .access-denied {
+      display: none;
+      color: red;
+      text-align: center;
+      font-size: 1.5em;
+    }
+  </style>
+</head>
+<body onload="checkAccessCode()">
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <a class="navbar-brand" href="#">ChatApp</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#">View Menu</a>
+        </li>
+      </ul>
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Menu</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Access Denied Message -->
+  <div id="access-denied" class="access-denied">Access Denied: Incorrect Code</div>
+
+  <!-- Chatbot Workspace -->
+  <div class="chatbot-container" id="chatbot-container" style="display: none;">
+    <div class="chat-window">
+      <div id="chat-content" class="chat-content">
+        <div class="chat-message bot"><strong>Waiter:</strong> Hello! How can I assist you today?</div>
+      </div>
+      <div class="chat-input-container">
+        <input type="text" id="user-input" class="chat-input" placeholder="Type your message..." onkeydown="sendMessage(event)">
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
+  <script>
+    // Set the required access code
+    const ACCESS_CODE = "1234";
+
+    // Function to check access code
+    function checkAccessCode() {
+      let userCode = prompt("Enter Access Code to use the chatbot:");
+
+      if (userCode === ACCESS_CODE) {
+        // If code is correct, show chatbot container
+        document.getElementById("chatbot-container").style.display = "flex";
+        document.getElementById("access-denied").style.display = "none";
+      } else {
+        // If code is incorrect, show access denied message
+        document.getElementById("access-denied").style.display = "block";
+        document.getElementById("chatbot-container").style.display = "none";
+      }
+    }
+
+    // Send Message Function
+    function sendMessage(event) {
+      if (event.key === "Enter") {
+        const userInput = document.getElementById("user-input").value.trim();
+        if (userInput !== "") {
+          const chatContent = document.getElementById("chat-content");
+
+          // Display user message
+          const userMessage = document.createElement("div");
+          userMessage.className = "chat-message user";
+          userMessage.innerHTML = "<strong>You:</strong> " + userInput;
+          chatContent.appendChild(userMessage);
+
+          // Append bot reply (for demonstration)
+          const botMessage = document.createElement("div");
+          botMessage.className = "chat-message bot";
+          botMessage.innerHTML = "<strong>Waiter:</strong> I'm here to help!";
+          chatContent.appendChild(botMessage);
+
+          // Clear input field
+          document.getElementById("user-input").value = "";
+
+          // Scroll to bottom
+          chatContent.scrollTop = chatContent.scrollHeight;
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>
